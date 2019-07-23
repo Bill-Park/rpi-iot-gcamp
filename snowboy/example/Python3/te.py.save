@@ -1,0 +1,22 @@
+from telegram.ext import Updater, MessageHandler, Filters
+import weather_api
+
+my_token = "863434852:AAG_68YplNRw3JWeaKX1ATf54U64mXFFaJU"
+
+print('start telegram chat bot')
+
+def get_message(bot, update) :
+    #update.message.reply_text("got text")
+    print("got")
+    temp, humi = weather_api.main()
+    return_message = "온도는 {temp}도, 습도는 {humi}입니다.".format(temp = temp, humi = humi)
+    print(return_message)
+    update.message.reply_text(return_message)
+    
+updater = Updater(my_token)
+
+message_handler = MessageHandler(Filters.text, get_message)
+updater.dispatcher.add_handler(message_handler)
+
+updater.start_polling(timeout=5, clean=True)
+updater.idle()
